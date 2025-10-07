@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Navigation from '@/components/Navigation'
@@ -13,11 +13,7 @@ export default function SummaryPage() {
   const router = useRouter()
   const supabase = createClientComponentClient()
 
-  useEffect(() => {
-    checkUserAndLoadStats()
-  }, [])
-
-  const checkUserAndLoadStats = async () => {
+  const checkUserAndLoadStats = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
@@ -28,7 +24,11 @@ export default function SummaryPage() {
     setUser(user)
     await calculateStats(user.id)
     setLoading(false)
-  }
+  }, [router, supabase])
+
+  useEffect(() => {
+    checkUserAndLoadStats()
+  }, [checkUserAndLoadStats])
 
   const calculateStats = async (userId) => {
     // Get logs from last 7 days

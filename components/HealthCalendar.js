@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 export default function HealthCalendar({ logs, onDateClick }) {
@@ -8,21 +8,16 @@ export default function HealthCalendar({ logs, onDateClick }) {
   const [calendarDays, setCalendarDays] = useState([])
   const [datesWithLogs, setDatesWithLogs] = useState(new Set())
 
-  useEffect(() => {
-    generateCalendar()
-    extractLogDates()
-  }, [currentDate, logs])
-
-  const extractLogDates = () => {
+  const extractLogDates = useCallback(() => {
     const dates = new Set()
     logs.forEach(log => {
       const logDate = new Date(log.log_date)
       dates.add(logDate.toISOString().split('T')[0])
     })
     setDatesWithLogs(dates)
-  }
+  }, [logs])
 
-  const generateCalendar = () => {
+  const generateCalendar = useCallback(() => {
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
 
@@ -46,7 +41,12 @@ export default function HealthCalendar({ logs, onDateClick }) {
     }
 
     setCalendarDays(days)
-  }
+  }, [currentDate])
+
+  useEffect(() => {
+    generateCalendar()
+    extractLogDates()
+  }, [generateCalendar, extractLogDates])
 
   const goToPreviousMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))

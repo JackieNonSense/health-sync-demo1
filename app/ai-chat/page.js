@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Navigation from '@/components/Navigation'
@@ -17,11 +17,7 @@ export default function AIChatPage() {
   const router = useRouter()
   const supabase = createClientComponentClient()
 
-  useEffect(() => {
-    checkUserAndPlan()
-  }, [])
-
-  const checkUserAndPlan = async () => {
+  const checkUserAndPlan = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
@@ -43,7 +39,11 @@ export default function AIChatPage() {
     }
 
     setLoading(false)
-  }
+  }, [router, supabase])
+
+  useEffect(() => {
+    checkUserAndPlan()
+  }, [checkUserAndPlan])
 
   const handleUpgrade = async () => {
     setUpgrading(true)

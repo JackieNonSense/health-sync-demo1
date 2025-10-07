@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Navigation from '@/components/Navigation'
@@ -15,11 +15,7 @@ export default function DashboardPage() {
   const router = useRouter()
   const supabase = createClientComponentClient()
 
-  useEffect(() => {
-    checkUser()
-  }, [])
-
-  const checkUser = async () => {
+  const checkUser = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
@@ -29,7 +25,11 @@ export default function DashboardPage() {
       fetchLogs(user.id)
     }
     setLoading(false)
-  }
+  }, [router, supabase])
+
+  useEffect(() => {
+    checkUser()
+  }, [checkUser])
 
   const fetchLogs = async (userId) => {
     const { data, error } = await supabase
@@ -126,7 +126,7 @@ export default function DashboardPage() {
             <div className="text-center py-12 text-gray-500">
               <div className="text-6xl mb-4">📝</div>
               <p>No health logs yet</p>
-              <p className="text-sm">Click "Add New Health Log" to get started</p>
+              <p className="text-sm">Click &quot;Add New Health Log&quot; to get started</p>
             </div>
           ) : (
             <div className="space-y-4">
