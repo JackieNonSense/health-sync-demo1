@@ -95,7 +95,7 @@ export default function HealthLogForm({ onLogAdded }) {
           value={symptoms}
           onChange={(e) => setSymptoms(e.target.value)}
           placeholder="e.g., headache, fatigue"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
         />
       </div>
 
@@ -132,7 +132,7 @@ export default function HealthLogForm({ onLogAdded }) {
           onChange={(e) => setNotes(e.target.value)}
           placeholder="Add any additional details..."
           rows={4}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
         />
       </div>
 
