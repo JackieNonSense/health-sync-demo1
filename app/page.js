@@ -23,7 +23,7 @@ export default function Home() {
               Health Sync
             </h1>
             <p className="text-gray-600">
-              Track your health, visualize your progress
+              Track your health, visualize your progress - Demo purpose only
             </p>
           </div>
 
